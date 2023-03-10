@@ -33,7 +33,7 @@ public class TestController {
     @RequestMapping("/localException")
     @ResponseBody
     public String localException() throws Exception {
-      zkTestCache.broadcast(1L);
+      zkTestCache.broadcast("1");
         return "sss";
 
     }

@@ -7,17 +7,11 @@ import java.util.Map;
  */
 public interface AbstractLocalCache<K, V> {
 
-    Map<K, V> cache();
+    CacheConfig getCacheConfig();
 
-    String getType();
-
-    V refresh(String key) throws Exception;
+    V refresh(String key);
 
     V getCache(K key);
 
-    void broadcast(K key) throws Exception;
-
     V setCache(K key, V value);
-
-    void broadcastClient(K key) throws Exception;
 }
