@@ -16,9 +16,9 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author shangqing.liu
  */
-public abstract class ZkAbstractLocalCache<K, V> implements AbstractLocalCache<K, V>, Broadcast {
+public abstract class ZkAbstractLocalCache<V> implements AbstractLocalCache<V>, Broadcast {
 
-    private Cache<K, V> CACHE;
+    private Cache<String, V> CACHE;
 
     private CuratorFramework curatorFramework;
 
@@ -42,21 +42,25 @@ public abstract class ZkAbstractLocalCache<K, V> implements AbstractLocalCache<K
         NodeCache nodeCache = new NodeCache(curatorFramework, cacheConfig.getZkCachePath(), false);
         NodeCacheListener nodeCacheListener = () -> {
             ChildData currentData = nodeCache.getCurrentData();
-            String newData = new String(currentData.getData());
-            this.refresh(newData);
+            if (currentData.getData() == null) {
+                return;
+            }
+            String cacheKey = new String(currentData.getData());
+            V newCacheValue = this.refresh(cacheKey);
+            this.setCache(cacheKey, newCacheValue);
         };
         nodeCache.getListenable().addListener(nodeCacheListener);
         nodeCache.start();
     }
 
     @Override
-    public final V getCache(K key) {
-        return CACHE.get(key, k -> refresh(key.toString()));
+    public final V getCache(String key) {
+        return CACHE.get(key, k -> refresh(key));
     }
 
 
     @Override
-    public final V setCache(K key, V value) {
+    public final V setCache(String key, V value) {
         CACHE.put(key, value);
         return value;
     }

@@ -1,17 +1,19 @@
 package cn.mianshiyi.localcache.client;
 
+import org.checkerframework.checker.units.qual.K;
+
 import java.util.Map;
 
 /**
  * @author shangqing.liu
  */
-public interface AbstractLocalCache<K, V> {
+public interface AbstractLocalCache<V> {
 
     CacheConfig getCacheConfig();
 
     V refresh(String key);
 
-    V getCache(K key);
+    V getCache(String key);
 
-    V setCache(K key, V value);
+    V setCache(String key, V value);
 }

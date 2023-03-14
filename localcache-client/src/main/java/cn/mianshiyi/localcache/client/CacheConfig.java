@@ -18,6 +18,12 @@ public class CacheConfig {
     //zk配置 地址
     private String zkAddr;
 
+    //etcd配置 缓存监听路径
+    private String etcdCachePath;
+    //etcd 地址
+    private String[] etcdAddr;
+
+
     public CacheConfig(int initialCapacity, int maximumSize, int expireAfterWrite) {
         this.initialCapacity = initialCapacity;
         this.maximumSize = maximumSize;
@@ -65,5 +71,21 @@ public class CacheConfig {
 
     public void setZkAddr(String zkAddr) {
         this.zkAddr = zkAddr;
+    }
+
+    public String[] getEtcdAddr() {
+        return etcdAddr;
+    }
+
+    public void setEtcdAddr(String[] etcdAddr) {
+        this.etcdAddr = etcdAddr;
+    }
+
+    public String getEtcdCachePath() {
+        return etcdCachePath;
+    }
+
+    public void setEtcdCachePath(String etcdCachePath) {
+        this.etcdCachePath = etcdCachePath;
     }
 }
