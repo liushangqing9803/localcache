@@ -1,7 +1,5 @@
 package cn.mianshiyi.localcache.client;
 
-import org.checkerframework.checker.units.qual.K;
-
 /**
  * @author shangqing.liu
  */

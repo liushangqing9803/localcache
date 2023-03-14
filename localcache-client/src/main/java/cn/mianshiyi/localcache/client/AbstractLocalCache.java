@@ -1,9 +1,5 @@
 package cn.mianshiyi.localcache.client;
 
-import org.checkerframework.checker.units.qual.K;
-
-import java.util.Map;
-
 /**
  * @author shangqing.liu
  */

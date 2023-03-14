@@ -1,6 +1,5 @@
 package cn.mianshiyi.localcache.client;
 
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author shangqing.liu
