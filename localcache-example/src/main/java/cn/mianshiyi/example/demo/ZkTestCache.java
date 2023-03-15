@@ -14,8 +14,6 @@ public class ZkTestCache extends ZkAbstractLocalCache<String> {
     @Override
     public String refresh(String key) {
         String s = UUID.randomUUID().toString();
-        System.out.println("key" + key);
-        System.out.println("刷新" + getCacheConfig().getZkCachePath() + "--" + s);
         return s;
     }
 
