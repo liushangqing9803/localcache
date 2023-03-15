@@ -1,6 +1,5 @@
 package cn.mianshiyi.localcache.client;
 
-import cn.mianshiyi.localcache.client.utils.ZookeeperUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.apache.curator.framework.CuratorFramework;
