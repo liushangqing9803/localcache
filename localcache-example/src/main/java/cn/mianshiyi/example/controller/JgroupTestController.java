@@ -1,6 +1,7 @@
 package cn.mianshiyi.example.controller;
 
 import cn.mianshiyi.example.demo.EtcdTestCache;
+import cn.mianshiyi.example.demo.JgroupTestCache;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,11 +15,11 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author shangqing.liu
  */
-//@Controller
-public class EtcdTestController {
+@Controller
+public class JgroupTestController {
 
     @Resource
-    private EtcdTestCache etcdTestCache;
+    private JgroupTestCache jgroupTestCache;
 
     @PostConstruct
     public void init() {
@@ -26,7 +27,7 @@ public class EtcdTestController {
         ScheduledExecutorService QPS_COUNT_THREAD_POOL = Executors.newScheduledThreadPool(1);
 
         QPS_COUNT_THREAD_POOL.scheduleAtFixedRate(() -> {
-            String cache = etcdTestCache.getCache("1");
+            String cache = jgroupTestCache.getCache("1");
             System.out.println(cache);
             System.out.println(11111);
         }, 1, 1, TimeUnit.SECONDS);
@@ -35,7 +36,7 @@ public class EtcdTestController {
     @RequestMapping("/etcdlocalException")
     @ResponseBody
     public String localException() throws Exception {
-        etcdTestCache.broadcast("1");
+        jgroupTestCache.broadcast("1");
         return "sss";
 
     }

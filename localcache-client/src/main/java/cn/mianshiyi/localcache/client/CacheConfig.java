@@ -22,6 +22,8 @@ public class CacheConfig {
     //etcd 地址
     private String[] etcdAddr;
 
+    //Jjgroup配置 缓存监听路径
+    private String jgroupGroupName;
 
     public CacheConfig(int initialCapacity, int maximumSize, int expireAfterWrite) {
         this.initialCapacity = initialCapacity;
@@ -86,5 +88,13 @@ public class CacheConfig {
 
     public void setEtcdCachePath(String etcdCachePath) {
         this.etcdCachePath = etcdCachePath;
+    }
+
+    public String getJgroupGroupName() {
+        return jgroupGroupName;
+    }
+
+    public void setJgroupGroupName(String jgroupGroupName) {
+        this.jgroupGroupName = jgroupGroupName;
     }
 }

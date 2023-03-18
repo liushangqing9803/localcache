@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author shangqing.liu
  */
-@Controller
+//@Controller
 public class TestController {
 
     @Resource
