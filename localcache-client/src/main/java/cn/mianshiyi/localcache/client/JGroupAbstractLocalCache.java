@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * 使用jgroup作为广播渠道
  * 来更新各client中的缓存
  * 默认采用caffeine cache 作为缓存使用
- * 实现类需要 CacheConfig 配置类中需要传入zkAddr(集群使用 ip1:port1,ip2:port2)以及监听路径zkCachePath
+ * 实现类需要 CacheConfig 配置类中需要传入jgroupGroupName
  * 实现类项目依赖spring，需要注入到spring中
  *
  * @author shangqing.liu

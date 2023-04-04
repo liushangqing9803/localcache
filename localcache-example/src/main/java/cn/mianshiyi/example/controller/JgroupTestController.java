@@ -29,7 +29,7 @@ public class JgroupTestController {
         QPS_COUNT_THREAD_POOL.scheduleAtFixedRate(() -> {
             String cache = jgroupTestCache.getCache("1");
             System.out.println(cache);
-            System.out.println(11111);
+            System.out.println("jgroup");
         }, 1, 1, TimeUnit.SECONDS);
     }
 
