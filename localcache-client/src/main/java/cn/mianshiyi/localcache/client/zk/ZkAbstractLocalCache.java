@@ -3,6 +3,7 @@ package cn.mianshiyi.localcache.client.zk;
 
 import cn.mianshiyi.localcache.client.AbstractLocalCache;
 import cn.mianshiyi.localcache.client.Broadcast;
+import cn.mianshiyi.localcache.client.exception.DistLocalCacheRuntimeException;
 import cn.mianshiyi.localcache.client.util.ZookeeperUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -30,10 +31,13 @@ public abstract class ZkAbstractLocalCache<K, V> implements AbstractLocalCache<K
 
     private CuratorFramework curatorFramework;
 
-    public void init(ZkCacheConfig zkCacheConfig) {
+    public final void init(ZkCacheConfig zkCacheConfig) {
         this.cacheConfig = zkCacheConfig;
         if (cacheConfig.getZkAddr() == null || "".equals(cacheConfig.getZkAddr())) {
-            throw new RuntimeException("localcache zk addr must not null");
+            throw new DistLocalCacheRuntimeException("localcache zk addr must not null");
+        }
+        if (cacheConfig.getZkCachePath() == null || "".equals(cacheConfig.getZkCachePath())) {
+            throw new DistLocalCacheRuntimeException("localcache zk path must not null");
         }
         cache = Caffeine.newBuilder()
                 //cache的初始容量
@@ -59,7 +63,7 @@ public abstract class ZkAbstractLocalCache<K, V> implements AbstractLocalCache<K
             nodeCache.getListenable().addListener(nodeCacheListener);
             nodeCache.start();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DistLocalCacheRuntimeException(e);
         }
     }
 
@@ -79,7 +83,7 @@ public abstract class ZkAbstractLocalCache<K, V> implements AbstractLocalCache<K
         try {
             ZookeeperUtil.setData(curatorFramework, this.cacheConfig.getZkCachePath(), data);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DistLocalCacheRuntimeException(e);
         }
     }
 
