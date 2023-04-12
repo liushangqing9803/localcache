@@ -1,5 +1,8 @@
-package cn.mianshiyi.localcache.client;
+package cn.mianshiyi.localcache.client.etcd;
 
+
+import cn.mianshiyi.localcache.client.AbstractLocalCache;
+import cn.mianshiyi.localcache.client.Broadcast;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.etcd.jetcd.ByteSequence;
@@ -16,20 +19,20 @@ import java.util.concurrent.TimeUnit;
  * 来更新各client中的缓存
  * 默认采用caffeine cache 作为缓存使用
  * 实现类需要 CacheConfig 配置类中需要传入etcdAddr以及监听路径etcdCachePath
- * 实现类项目依赖spring，需要注入到spring中
- *
  * @author shangqing.liu
  */
-public abstract class EtcdAbstractLocalCache<V> implements AbstractLocalCache<V>, Broadcast {
+public abstract class EtcdAbstractLocalCache<K, V> implements AbstractLocalCache<K, V>, Broadcast {
 
-    private Cache<String, V> CACHE;
+    private EtcdCacheConfig cacheConfig;
+
+    private Cache<K, V> cache;
 
     private Client etcdClient;
 
     @PostConstruct
-    public final void init() {
-        CacheConfig cacheConfig = getCacheConfig();
-        CACHE = Caffeine.newBuilder()
+    public final void init(EtcdCacheConfig cacheConfig) {
+        this.cacheConfig = cacheConfig;
+        cache = Caffeine.newBuilder()
                 //cache的初始容量
                 .initialCapacity(cacheConfig.getInitialCapacity())
                 //cache最大缓存数
@@ -45,29 +48,32 @@ public abstract class EtcdAbstractLocalCache<V> implements AbstractLocalCache<V>
         ByteSequence key1 = ByteSequence.from(cacheConfig.getEtcdCachePath(), StandardCharsets.UTF_8);
         watch.watch(key1, watchResponse -> watchResponse.getEvents().forEach(event -> {
             String value = event.getKeyValue().getValue().toString();
-            V newCacheValue = this.refresh(value);
-            this.setCache(value, newCacheValue);
+            this.receive(value.getBytes(StandardCharsets.UTF_8));
         }));
     }
 
     @Override
-    public final V getCache(String key) {
-        return CACHE.get(key, k -> refresh(key));
+    public final V getCache(K key) {
+        return cache.get(key, k -> refresh(key));
     }
 
-
     @Override
-    public final V setCache(String key, V value) {
-        CACHE.put(key, value);
+    public final V setCache(K key, V value) {
+        cache.put(key, value);
         return value;
     }
 
     @Override
-    public final void broadcast(String key) {
-        KV kv = etcdClient.getKVClient();
-        ByteSequence etcdKey = ByteSequence.from(getCacheConfig().getEtcdCachePath(), StandardCharsets.UTF_8);
-        ByteSequence etcdValue = ByteSequence.from(key, StandardCharsets.UTF_8);
-        // 写入key value
-        kv.put(etcdKey, etcdValue);
+    public final void broadcast(byte[] data) {
+        try {
+            KV kv = etcdClient.getKVClient();
+            ByteSequence etcdKey = ByteSequence.from(cacheConfig.getEtcdCachePath(), StandardCharsets.UTF_8);
+            ByteSequence etcdValue = ByteSequence.from(data);
+            // 写入key value
+            kv.put(etcdKey, etcdValue);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

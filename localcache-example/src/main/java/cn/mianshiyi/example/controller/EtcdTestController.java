@@ -1,5 +1,6 @@
 package cn.mianshiyi.example.controller;
 
+
 import cn.mianshiyi.example.demo.EtcdTestCache;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +37,7 @@ public class EtcdTestController {
     @RequestMapping("/etcdlocalException")
     @ResponseBody
     public String localException() throws Exception {
-        etcdTestCache.broadcast("1");
+        etcdTestCache.broadcast("1".getBytes(StandardCharsets.UTF_8));
         return "sss";
 
     }

@@ -1,15 +1,17 @@
-package cn.mianshiyi.localcache.client;
+package cn.mianshiyi.localcache.client.zk;
 
+
+import cn.mianshiyi.localcache.client.AbstractCacheConfig;
 
 /**
  * @author shangqing.liu
  */
-public class CacheConfig {
-    //初始数
+public class ZkCacheConfig implements AbstractCacheConfig {
+    //cache初始数
     private int initialCapacity;
     //cache最大缓存数
     private int maximumSize;
-    //设置写缓存后n秒钟过期
+    //cache设置写缓存后n秒钟过期
     private int expireAfterWrite;
 
     //zk配置 缓存监听路径
@@ -17,21 +19,15 @@ public class CacheConfig {
     //zk配置 地址
     private String zkAddr;
 
-    //etcd配置 缓存监听路径
-    private String etcdCachePath;
-    //etcd 地址
-    private String[] etcdAddr;
-
-    //Jjgroup配置 缓存监听路径
-    private String jgroupGroupName;
-
-    public CacheConfig(int initialCapacity, int maximumSize, int expireAfterWrite) {
+    public ZkCacheConfig(int initialCapacity, int maximumSize, int expireAfterWrite, String zkCachePath, String zkAddr) {
         this.initialCapacity = initialCapacity;
         this.maximumSize = maximumSize;
         this.expireAfterWrite = expireAfterWrite;
+        this.zkCachePath = zkCachePath;
+        this.zkAddr = zkAddr;
     }
 
-    public CacheConfig() {
+    public ZkCacheConfig() {
     }
 
     public int getInitialCapacity() {
@@ -74,27 +70,4 @@ public class CacheConfig {
         this.zkAddr = zkAddr;
     }
 
-    public String[] getEtcdAddr() {
-        return etcdAddr;
-    }
-
-    public void setEtcdAddr(String[] etcdAddr) {
-        this.etcdAddr = etcdAddr;
-    }
-
-    public String getEtcdCachePath() {
-        return etcdCachePath;
-    }
-
-    public void setEtcdCachePath(String etcdCachePath) {
-        this.etcdCachePath = etcdCachePath;
-    }
-
-    public String getJgroupGroupName() {
-        return jgroupGroupName;
-    }
-
-    public void setJgroupGroupName(String jgroupGroupName) {
-        this.jgroupGroupName = jgroupGroupName;
-    }
 }

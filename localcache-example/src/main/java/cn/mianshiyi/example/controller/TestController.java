@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,7 @@ public class TestController {
     @RequestMapping("/localException")
     @ResponseBody
     public String localException() throws Exception {
-      zkTestCache.broadcast("1");
+      zkTestCache.broadcast("1".getBytes(StandardCharsets.UTF_8));
         String cache = zkTestCache.getCache("1");
         return cache;
 

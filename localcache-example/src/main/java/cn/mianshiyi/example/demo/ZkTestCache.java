@@ -1,28 +1,34 @@
 package cn.mianshiyi.example.demo;
 
-import cn.mianshiyi.localcache.client.CacheConfig;
-import cn.mianshiyi.localcache.client.ZkAbstractLocalCache;
-import org.springframework.stereotype.Service;
 
+import cn.mianshiyi.localcache.client.zk.ZkAbstractLocalCache;
+import cn.mianshiyi.localcache.client.zk.ZkCacheConfig;
+
+import javax.annotation.PostConstruct;
 import java.util.UUID;
 
 /**
  * @author shangqing.liu
  */
-@Service
-public class ZkTestCache extends ZkAbstractLocalCache<String> {
-    @Override
-    public String refresh(String key) {
-        String s = UUID.randomUUID().toString();
-        return s;
+//@Service
+public class ZkTestCache extends ZkAbstractLocalCache<String, String> {
+
+    @PostConstruct
+    public void init() {
+        ZkCacheConfig config = new ZkCacheConfig(10, 100, 60 * 60
+                , "/test1/zkPath", "127.0.0.1:2181");
+        super.init(config);
     }
 
     @Override
-    public CacheConfig getCacheConfig() {
-        CacheConfig cacheConfig = new CacheConfig(10, 100, 1000);
-        cacheConfig.setZkCachePath("/lo333ache/0307test2222001");
-        cacheConfig.setZkAddr("127.0.0.1:2181");
-        return cacheConfig;
+    public String refresh(String key) {
+        return UUID.randomUUID().toString();
+    }
+
+    @Override
+    public void receive(byte[] data) {
+        String s = String.valueOf(data);
+        setCache(s, UUID.randomUUID().toString());
     }
 
 }

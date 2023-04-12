@@ -1,4 +1,4 @@
-package cn.mianshiyi.localcache.client;
+package cn.mianshiyi.localcache.client.util;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
@@ -32,7 +32,7 @@ public class ZookeeperUtil {
      * @param path
      * @throws Exception
      */
-    public static void setData(CuratorFramework curatorFramework, String path, String data) throws Exception {
-        curatorFramework.setData().forPath(path, data.getBytes());
+    public static void setData(CuratorFramework curatorFramework, String path, byte [] data) throws Exception {
+        curatorFramework.setData().forPath(path, data);
     }
 }
